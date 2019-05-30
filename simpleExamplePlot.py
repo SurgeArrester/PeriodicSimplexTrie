@@ -29,21 +29,20 @@ x.fit_simplices(simplex_points)
 
 trie = PeriodicSimplexTrie()
 
-print()
-
 for simplex in x.simplex_array:
     trie.insert(simplex)
 
+print("\nPeriodic Simplex Trie Representation")
 print("---------------")
 print(trie.string_rep())
-print("---------------")
 
 full_filt = trie.get_filtration()
 
+print("\nFull Filtration")
+print("---------------")
 for k, v in full_filt.items():
     for simp in v:
         print(f"{simp} -> {k}")
-print()
 
 plt.triplot(points[:,0], points[:,1], tri.simplices.copy())
 plt.plot(points[:,0], points[:,1], 'o')

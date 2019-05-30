@@ -1,4 +1,5 @@
 import os
+# Below is hacky workaround for vscode as cba configuring runtime json
 os.chdir("/home/cameron/Dropbox/University/PhD/SimplexTree")
 
 import numpy as np
@@ -33,7 +34,7 @@ class PointCloudGenerator():
                 next_labels = range(len(self.motif))
                 pointset.append(next_supercell)
                 labelled_pointset.append(list(zip(next_supercell, next_labels)))
-                print()
+
         # Flatten the nested lists
         pointset = [item for sublist in pointset for item in sublist]
         labelled_pointset = [item for sublist in labelled_pointset for item in sublist]
@@ -66,8 +67,6 @@ class PointCloudGenerator():
                 simplex_rep.append(Simplex((simplex[1], vector_to_parent)))
 
             simplex_array.append(simplex_rep)
-            print()
-
         self.simplex_array = simplex_array
 
 
