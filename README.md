@@ -1,4 +1,4 @@
-# PeriodicSimplexTrie
+# Periodic Simplex Trie
 A first attempt at implementing a periodic simplex trie. A new datastructure for encoding infinitely repeating pointclouds in a form that can be applied for topological data analysis
 
 Example Usage
