@@ -5,6 +5,7 @@ Example Usage
 -------------
 ```python
 from PeriodicSimplexTrie import *
+
 x = PeriodicSimplexTrie()
 a = Vector([1, 0])
 b = Vector([0, 2])
