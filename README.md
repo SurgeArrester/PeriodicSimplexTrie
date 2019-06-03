@@ -7,11 +7,13 @@ Example Usage
 from PeriodicSimplexTrie import *
 
 x = PeriodicSimplexTrie()
+
 a = Vector([1, 0])
 b = Vector([0, 2])
 y = Simplex([("p", a), ("p", b), ("p", -a-b)])
 
 x.insert(y)
+
 print(x.string_rep())
 
 full_filtration = x.get_filtration()
