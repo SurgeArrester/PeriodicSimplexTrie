@@ -100,19 +100,15 @@ class PeriodicSimplexTrie:
         return x
 
     def filtration(self, filt):
-        """All simplexes that are <= to the filt value passed"""
+        """Set of all simplexes that are <= to the filt value passed"""
         current = self.root
         filtration = current.apply_filtration(filt)
         filtration = [x for x in filtration if x is not None]
+
         if len(filtration) == 0:
             point_list = [k for k, v in current.children]
             filtration = list(set(point_list))
 
-        Simplex([('0', Vector([0, 1])), ('0', Vector([-2, 0]))]) == Simplex([('0', Vector([0, 1])), ('0', Vector([-2, 0]))])
-        try:
-            filtration[1] == Simplex([('0', Vector([0, 1])), ('0', Vector([-2, 0]))])
-        except:
-            pass
         return set(filtration)
 
     def get_filtration_points(self):
@@ -142,10 +138,20 @@ class PeriodicSimplexTrie:
 
         points = list(reversed(self.filt_points))
 
-        # Take out the filtrations from the previous filtration
+        # Subtract the filtrations from the previous filtration points
         for i, p in enumerate(points):
             if i != len(points) - 1:
                 filt[p] = [x for x in filt[p] if x not in filt[points[i+1]]]
+
+        # Finally remove any simplexes that are subsets of others
+        for filt_value, simplex_list in filt.items():
+            for i, simplex1 in enumerate(list(simplex_list)):
+                for j, simplex2 in enumerate(list(simplex_list)):
+                    if simplex1 in simplex2:
+                        try:
+                            simplex_list.remove(simplex1)
+                        except:
+                            pass
 
         self.full_filtration = filt
 
@@ -319,8 +325,14 @@ class Simplex:
         return True
 
     def __hash__(self):
-        Simplex([('p', Vector([1, 0]))]) == Simplex([('p', Vector([1, 0]))])
         return hash(tuple(self.labelled_vertices))
+
+    def __contains__(self, other):
+        for point in self.labelled_vertices:
+            if other == Simplex(point):
+                return True
+
+        return False
 
     def append(self, other):
         """Adds labelled vector, (label, Vector([])) to the simplex"""

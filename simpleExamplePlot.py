@@ -5,6 +5,9 @@ A small test script to print the simplex tree and associated filtration for a
 pointset defined by the user
 """
 
+import os
+os.chdir('/home/cameron/Dropbox/University/PhD/SimplexTree')
+
 import matplotlib.pyplot as plt
 from scipy.spatial import Delaunay
 import numpy as np
