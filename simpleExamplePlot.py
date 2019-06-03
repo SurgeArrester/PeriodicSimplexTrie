@@ -1,5 +1,9 @@
-import os
-os.chdir('/home/cameron/Dropbox/University/PhD/SimplexTree')
+"""
+Author: Cameron Hargreaves
+
+A small test script to print the simplex tree and associated filtration for a
+pointset defined by the user
+"""
 
 import matplotlib.pyplot as plt
 from scipy.spatial import Delaunay
@@ -21,9 +25,7 @@ motif = dual_point
 
 x = PointCloudGenerator(motif, lattice)
 
-points = x.pointset
-
-points = np.array(points)
+points = np.array(x.pointset)
 tri = Delaunay(points)
 
 simplices = tri.simplices

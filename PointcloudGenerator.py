@@ -1,12 +1,42 @@
-import os
-# Below is hacky workaround for vscode as cba configuring runtime json
-os.chdir("/home/cameron/Dropbox/University/PhD/SimplexTree")
+"""
+Author: Cameron Hargreaves
+
+A simple class to perform a tiling of a two dimensional lattice, label each of
+these points, and store them in the variable PointCloudGenerator.simplex_array
+
+Example usage:
+import numpy as np
+from scipy.spatial import Delaunay
+
+single_point = ((0, 0),)
+lattice = {}
+lattice['a'] = 1
+lattice['b'] = 2
+lattice['alpha'] = 90
+
+x = PointCloudGenerator(motif, lattice)
+points = np.array(x.pointset)
+
+tri = Delaunay(points)
+simplices = tri.simplices
+simplex_points = points[tri.simplices]
+
+x.fit_simplices(simplex_points)
+"""
 
 import numpy as np
 from math import sqrt, cos
 from PeriodicSimplexTrie import *
 
 class PointCloudGenerator():
+    """
+    A tiling class for simple two-dimensional lattices and motifs
+
+    Params
+    motif: A list of points within the unit cell as a tuple of tuples
+           eg: motif = ((0, 0),)
+    lattice: A dictionary of basic 2D lattice parameters, "a", "b", and "alpha"
+    """
     def __init__(self, motif, lattice):
         self.a = lattice['a']
         self.b = lattice['b']
@@ -18,6 +48,14 @@ class PointCloudGenerator():
         self.generate_supercell()
 
     def generate_supercell(self):
+        """
+        Make a supercell of the lattice points that are inputted in the object
+        instantiation.
+        Additionally create a list of labels for each of the points within the
+        supercell, giving them the numeric count of 0-len(motif) and labelling
+        these red if they are in the central unit cell of the supercell, and
+        black otherwise
+        """
         w = self.a
         if self.alpha == 90:
             h = self.b
@@ -49,6 +87,14 @@ class PointCloudGenerator():
         return pointset
 
     def fit_simplices(self, simplices):
+        """
+        Take each of the points in the labelled pointset and create a simplex
+        object with these labels, as long as at least one point is inside the
+        central unit cell of the complete supercell.
+
+        There may be multiple repetitions of the same periodic simplex in this
+        list
+        """
         simplex_array = []
         for simplex in simplices:
             labelled_simplex = []
@@ -89,6 +135,6 @@ if __name__ == "__main__":
     lattice['b'] = 2
     lattice['alpha'] = 90
 
-    motif = ((4.75, 4.75),(5.25, 5.25))
+    motif = ((4.75, 4.75), (5.25, 5.25))
 
     x = PointCloudGenerator(motif, lattice)
