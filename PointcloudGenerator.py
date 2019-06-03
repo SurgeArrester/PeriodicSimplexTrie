@@ -19,25 +19,30 @@ class PointCloudGenerator():
 
     def generate_supercell(self):
         w = self.a
-
         if self.alpha == 90:
             h = self.b
-
         else:
             h = cos(self.alpha) * self.b
 
         pointset = list()
         labelled_pointset = list()
-        for i in [-1, 0, 1]:
-            for j in [-1, 0, 1]:
+
+        for i in [-1, 0, 1, 2]:
+            for j in [-1, 0, 1, 2]:
                 next_supercell = [(x+(h*i), y+(w*j)) for (x, y) in self.motif]
-                next_labels = range(len(self.motif))
+
+                if i == 0 and j == 0:
+                    next_labels = [str(l) + "_red" for l in range(len(self.motif))]
+                else:
+                    next_labels = [str(l) + "_blk" for l in range(len(self.motif))]
+
                 pointset.append(next_supercell)
                 labelled_pointset.append(list(zip(next_supercell, next_labels)))
 
         # Flatten the nested lists
         pointset = [item for sublist in pointset for item in sublist]
         labelled_pointset = [item for sublist in labelled_pointset for item in sublist]
+
         self.pointset = pointset
         self.labelled_pointset = labelled_pointset
 
@@ -66,7 +71,15 @@ class PointCloudGenerator():
                 vector_to_parent = Vector(vector)
                 simplex_rep.append(Simplex((simplex[1], vector_to_parent)))
 
-            simplex_array.append(simplex_rep)
+            # If we only have black points in the simplex pass
+            if all(item[0][-4:] == "_blk" for item in simplex_rep):
+                pass
+
+            # Else remove the point labels and add this to the list
+            else:
+                for i, item in enumerate(simplex_rep):
+                    simplex_rep[i] = (item[0][:-4], item[1])
+                simplex_array.append(simplex_rep)
         self.simplex_array = simplex_array
 
 

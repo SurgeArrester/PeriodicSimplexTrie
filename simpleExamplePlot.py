@@ -13,7 +13,11 @@ lattice['a'] = 1
 lattice['b'] = 2
 lattice['alpha'] = 90
 
-motif = ((4.75, 4.75), (5.25, 5.25))
+single_point = ((0, 0),)
+dual_point = ((-0.25, -0.25), (0.25, 0.25))
+benzene = ((0, 0.5), (0.25, 0), (0.75, 0), (1, 0.5), (0.25, 1), (0.75, 1))
+
+motif = dual_point
 
 x = PointCloudGenerator(motif, lattice)
 
@@ -40,10 +44,17 @@ full_filt = trie.get_filtration()
 
 print("\nFull Filtration")
 print("---------------")
+label_list = {}
+i = 0
 for k, v in full_filt.items():
     for simp in v:
+        if str(simp) in label_list.keys():
+            label_list[str(simp)] = i
+            i += 1
+
         print(f"{simp} -> {k}")
 
 plt.triplot(points[:,0], points[:,1], tri.simplices.copy())
 plt.plot(points[:,0], points[:,1], 'o')
 plt.show()
+
