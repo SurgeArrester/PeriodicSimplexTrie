@@ -144,14 +144,15 @@ class PeriodicSimplexTrie:
                 filt[p] = [x for x in filt[p] if x not in filt[points[i+1]]]
 
         # Finally remove any simplexes that are subsets of others
-        for filt_value, simplex_list in filt.items():
-            for i, simplex1 in enumerate(list(simplex_list)):
-                for j, simplex2 in enumerate(list(simplex_list)):
-                    if simplex1 in simplex2:
-                        try:
-                            simplex_list.remove(simplex1)
-                        except:
-                            pass
+        # TODO Test this for completeness as currently not working
+        # for filt_value, simplex_list in filt.items():
+        #     for i, simplex1 in enumerate(list(simplex_list)):
+        #         for j, simplex2 in enumerate(list(simplex_list)):
+        #             if simplex1 in simplex2:
+        #                 try:
+        #                     simplex_list.remove(simplex1)
+        #                 except:
+        #                     pass
 
         self.full_filtration = filt
 
@@ -279,6 +280,8 @@ class Simplex:
                        form [(label, Vector(to_next_point))]
     """
     def __init__(self, labelled_vertices):
+        # If we only have a single point (label, Vector()) then this isn't
+        # stored correctly so needs wrapping in a list
         if isinstance(labelled_vertices, list):
             self.labelled_vertices = sorted(labelled_vertices, key=lambda x: x[1])
         else:
@@ -300,20 +303,14 @@ class Simplex:
         return
 
     def __str__(self):
-        x = []
         if self.labelled_vertices is None:
             return "Simplex()"
-        for vertex in self.labelled_vertices:
-            x.append(vertex)
-        return f"Simplex({x})"
+        return f"Simplex({self.labelled_vertices})"
 
     def __repr__(self):
-        x = []
         if self.labelled_vertices is None:
             return "Simplex()"
-        for vertex in self.labelled_vertices:
-            x.append(vertex)
-        return f"Simplex({reprlib.repr(x)})"
+        return f"Simplex({self.labelled_vertices})"
 
     def __eq__(self, other):
         if (other == None) or (other == []) or not (hasattr(other, "labelled_vertices")) or (other[0] is None):
@@ -323,6 +320,9 @@ class Simplex:
             if vertex not in other.labelled_vertices:
                 return False
         return True
+
+    def __bool__(self):
+        return bool(self.labelled_vertices)
 
     def __hash__(self):
         return hash(tuple(self.labelled_vertices))
@@ -412,6 +412,10 @@ class Vector:
 
     def __neg__(self):
         dim = [-x for x in self.dims]
+        return Vector(dim)
+
+    def __abs__(self):
+        dim = [abs(x) for x in self.dims]
         return Vector(dim)
 
     def __lt__(self, other):

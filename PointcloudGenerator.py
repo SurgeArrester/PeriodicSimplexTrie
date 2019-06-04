@@ -25,8 +25,6 @@ x.fit_simplices(simplex_points)
 """
 
 import os
-# Below is hacky workaround for vscode as cba configuring runtime json
-os.chdir("/home/cameron/Dropbox/University/PhD/SimplexTree")
 
 import numpy as np
 from math import sqrt, cos

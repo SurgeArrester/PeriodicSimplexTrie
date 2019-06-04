@@ -6,7 +6,6 @@ pointset defined by the user
 """
 
 import os
-os.chdir('/home/cameron/Dropbox/University/PhD/SimplexTree')
 
 import matplotlib.pyplot as plt
 from scipy.spatial import Delaunay
@@ -16,15 +15,17 @@ from PeriodicSimplexTrie import *
 from PointcloudGenerator import PointCloudGenerator
 
 lattice = {}
-lattice['a'] = 1
-lattice['b'] = 2
+lattice['a'] = 1.5
+lattice['b'] = 1.5
 lattice['alpha'] = 90
 
 single_point = ((0, 0),)
 dual_point = ((-0.25, -0.25), (0.25, 0.25))
-benzene = ((0, 0.5), (0.25, 0), (0.75, 0), (1, 0.5), (0.25, 1), (0.75, 1))
+salt = ((0,0), (0, 0.5), (0.5, 0), (0.5, 0.5))
+graphene = ((0, 0), (0.25, 0.5), (0.75, 0.5), (1, 0))
+benzene = ((0.25, 0.5), (0.375, 0.125), (0.375, 0.875), (0.875, 0.875), (0.875, 0.125), (1, 0.5))
 
-motif = dual_point
+motif = benzene
 
 x = PointCloudGenerator(motif, lattice)
 
@@ -51,12 +52,9 @@ print("\nFull Filtration")
 print("---------------")
 label_list = {}
 i = 0
+
 for k, v in full_filt.items():
     for simp in v:
-        if str(simp) in label_list.keys():
-            label_list[str(simp)] = i
-            i += 1
-
         print(f"{simp} -> {k}")
 
 plt.triplot(points[:,0], points[:,1], tri.simplices.copy())
